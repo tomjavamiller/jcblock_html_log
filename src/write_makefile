@@ -1,0 +1,24 @@
+# make file for writeToJCBList
+# stand alone line:
+# sudo g++-4.9 -std=c++11 -std=c++1y -lcgicc WriteToJCBListCGI.cpp -o /usr/lib/cgi-bin/WriteToJCBList.cgi
+CC=g++-4.9
+CFLAGS=-c -Wall -std=c++11 -std=c++1y
+LDFLAGS=-lcgicc
+SOURCES=WriteToJCBListCGI.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=WriteToJCBList.cgi
+
+all: $(SOURCES) $(EXECUTABLE) deploy
+	
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm $(OBJECTS)
+
+deploy:
+	sudo cp $(EXECUTABLE) /usr/lib/cgi-bin/$(EXECUTABLE)
+
