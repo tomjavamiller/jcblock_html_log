@@ -1,0 +1,60 @@
+<!-- saved from url=http://192.168.0.27/cgi-bin/callLogPage.cgi?numLines=10 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Call Log</title>
+<style>table, th, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+}
+th, td {padding: 5px;}
+.lHalf {   float:left;   width:50%;}
+.rHalf {   float:right;   text-align:right;   width:50%;}
+.redbtn {  background-color:red;  color:white;  border-radius:28px;}
+.grnbtn {  background-color:green;  color:white;  border-radius:28px;}
+</style>
+</head>
+<body>
+<center><h2><img src="images/robot_banner.jpg" alt="Call Log"></h2></center>
+<table style="width:100%">
+<tbody><tr>
+       <th>Code</th>
+	    <th>Date</th>
+	    <th>Time</th>
+	    <th>Telephone</th>
+	    <th>Name</th>
+</tr>
+<tr><td>-</td><td>2015/07/21</td><td>16:41</td><td><div class="lHalf">1234440000</div><div class="rHalf"><button class="redbtn" onclick="blockNum('1234440000')" title="Add number to black list.">Block</button><button class="grnbtn" onclick="addNum('1234440000', 'WEDGET INC ')" title="Add number to white list.">Add</button></div></td><td><div class="lHalf">WEDGET INC </div><div class="rHalf"><button class="redbtn" onclick="blockName('WEDGET INC ')" title="Add name to black list.">Block</button><button class="grnbtn" onclick="addName('WEDGET INC ')" title="Add name to white list.">Add</button></div></td></tr>
+<tr><td>W</td><td>2015/07/21</td><td>18:32</td><td>1234440001</td><td>MAINSTREET,USA</td></tr>
+<tr><td>W</td><td>2015/07/21</td><td>18:55</td><td>1234440002</td><td>MAINSTREET,USA</td></tr>
+<tr><td>W</td><td>2015/07/22</td><td>11:50</td><td>1234440003</td><td>O</td></tr>
+<tr><td>-</td><td>2015/07/22</td><td>13:07</td><td><div class="lHalf">1234440007</div><div class="rHalf"><button class="redbtn" onclick="blockNum('1234440007')" title="Add number to black list.">Block</button><button class="grnbtn" onclick="addNum('1234440007', 'ACME WORLD')" title="Add number to white list.">Add</button></div></td><td><div class="lHalf">ACME WORLD</div><div class="rHalf"><button class="redbtn" onclick="blockName('ACME WORLD')" title="Add name to black list.">Block</button><button class="grnbtn" onclick="addName('ACME WORLD')" title="Add name to white list.">Add</button></div></td></tr>
+<tr><td>W</td><td>2015/07/22</td><td>19:52</td><td>1234440004</td><td>MAINSTREET,USA</td></tr>
+<tr><td>-</td><td>2015/07/23</td><td>08:57</td><td><div class="lHalf">1234440005</div><div class="rHalf"><button class="redbtn" onclick="blockNum('1234440005')" title="Add number to black list.">Block</button><button class="grnbtn" onclick="addNum('1234440005', 'MIKEYS CLUB H  ')" title="Add number to white list.">Add</button></div></td><td><div class="lHalf">MIKEYS CLUB H  </div><div class="rHalf"><button class="redbtn" onclick="blockName('MIKEYS CLUB H  ')" title="Add name to black list.">Block</button><button class="grnbtn" onclick="addName('MIKEYS CLUB H  ')" title="Add name to white list.">Add</button></div></td></tr>
+<tr><td>W</td><td>2015/07/23</td><td>11:01</td><td>1234440003</td><td>O</td></tr>
+<tr><td>-</td><td>2015/07/23</td><td>14:14</td><td><div class="lHalf">1234440006</div><div class="rHalf"><button class="redbtn" onclick="blockNum('1234440006')" title="Add number to black list.">Block</button><button class="grnbtn" onclick="addNum('1234440006', 'O')" title="Add number to white list.">Add</button></div></td><td><div class="lHalf">O</div><div class="rHalf"><button class="redbtn" onclick="blockName('O')" title="Add name to black list.">Block</button><button class="grnbtn" onclick="addName('O')" title="Add name to white list.">Add</button></div></td></tr>
+<tr><td>B</td><td>2015/07/23</td><td>14:26</td><td>5404123539</td><td>LOCAL CALL AREA</td></tr>
+<tr><td>B</td><td>2015/07/24</td><td>15:24</td><td>5156508111</td><td>SENIOR EASE</td></tr>
+</tbody></table>
+<script>
+function blockNum(num) {
+   var desc = (prompt('Blocking number: '+num+'\nPlease enter a description', 'spam call'));
+   if(desc != null) {
+      window.location = '/cgi-bin/WriteToJCBList.cgi?num=' + num + '&desc=' + encodeURIComponent(desc);
+   }}
+function blockName(name) {
+   var desc = (prompt('Blocking name: '+name+'\nPlease enter a description', 'spam call'));
+   if(desc != null) {
+      window.location = '/cgi-bin/WriteToJCBList.cgi?name=' + name + '&desc=' + encodeURIComponent(desc);
+   }}
+function addNum(num,desc) {
+   desc = (prompt('White listing number: '+num+'\nPlease enter a description', desc));
+   if(desc != null) {
+      window.location = '/cgi-bin/WriteToJCBList.cgi?num=' + num + '&file=white&desc=' + encodeURIComponent(desc);
+   }}
+function addName(name) {
+   desc = (prompt('White listing name: '+name+'\nPlease enter a description', name));
+   if(desc != null) {
+      window.location = '/cgi-bin/WriteToJCBList.cgi?name=' + name + '&file=white&desc=' + encodeURIComponent(desc);
+   }}
+</script>
+
+</body></html>

@@ -35,95 +35,97 @@
 using namespace std;
 using namespace cgicc;
 
-#define MAX_LOG_LINE 74
 
 class CallLogPageCGI {
-	int numLines = 10;
-	void printHTML_top() const;
-	void printHTML_end() const;
-	void printHTML_table();
+        int numLines = 10;
+        void printHTML_top() const;
+        void printHTML_end() const;
+        void printHTML_table();
 
 public:
-    static string getElement(const char* element);
-	CallLogPageCGI();
-	void printHTML();
+        static const auto MAX_LOG_LINE = 74;
+        static string getElement(const char* element);
+        CallLogPageCGI();
+        void printHTML();
 };
 
 string CallLogPageCGI::getElement(const char* element) {
-	   auto formData = Cgicc();
-	   auto fi = formData.getElement(element);
-	   if( fi != (*formData).end()  && !fi->isEmpty() ) {
-	      return fi->getValue();
-	   }
-	  return string();
+        auto formData = Cgicc();
+        auto fi = formData.getElement(element);
+        if( fi != (*formData).end()  && !fi->isEmpty() ) {
+           return fi->getValue();
+        }
+        return string();
 }
 
 CallLogPageCGI::CallLogPageCGI() {
        string strNumLines = getElement("numLines");
-	   if( strNumLines.size() > 0 ) {
-	      numLines = atoi(strNumLines.c_str());
-	      if(numLines < 5)
-	          numLines = 5;
-	   }
+           if( strNumLines.size() > 0 ) {
+              numLines = atoi(strNumLines.c_str());
+              if(numLines < 5)
+                  numLines = 5;
+           }
 }
+
 /**
  * Prints the top part of the HTML document to standard out.
  * Including style formatting for buttons and layout.
  */
 void CallLogPageCGI::printHTML_top() const {
-	cout << "Content-type: text/html\n\n"
-			"<html>\n"
-			"<head>\n"
-            "<title>Call Log</title>\n"
-			"<style>"
-	                "table, th, td {\n"
-			"    border: 1px solid black;\n"
-			"   border-collapse: collapse;\n"
-			"}\n"
-			"th, td {"
-			"padding: 5px;"
-			"}\n"
-            ".lHalf {"
-            "   float:left;"
-            "   width:50%;"
-			"}\n"
-            ".rHalf {"
-            "   float:right;"
-            "   text-align:right;"
-            "   width:50%;"
-			"}\n"
-			".redbtn {"
-			"  background-color:red;"
-			"  color:white;"
-			"  border-radius:28px;"
-			"}\n"
-			".grnbtn {"
-			"  background-color:green;"
-			"  color:white;"
-			"  border-radius:28px;"
-			"}\n"
-			"</style>\n"
-			"</head>\n"
-			"<body>\n"
-			"<center><h2><img src='/robot_banner.jpg' /></h2></center>\n";
+        cout << "<!DOCTYPE html>\n\n"
+                "<html>\n"
+                "<head>\n"
+		"<meta charset=\"utf-8\">\n"
+                "<title>Call Log</title>\n"
+                "<style>"
+                "table, th, td {\n"
+                "   border: 1px solid black;\n"
+                "   border-collapse: collapse;\n"
+                "}\n"
+                "th, td {"
+                "padding: 5px;"
+                "}\n"
+                ".lHalf {"
+                "   float:left;"
+                "   width:50%;"
+                "}\n"
+                ".rHalf {"
+                "   float:right;"
+                "   text-align:right;"
+                "   width:50%;"
+                "}\n"
+                ".redbtn {"
+                "  background-color:red;"
+                "  color:white;"
+                "  border-radius:28px;"
+                "}\n"
+                ".grnbtn {"
+                "  background-color:green;"
+                "  color:white;"
+                "  border-radius:28px;"
+                "}\n"
+                "</style>\n"
+                "</head>\n"
+                "<body>\n"
+                "<center><h2><img src='/robot_banner.jpg' /></h2></center>\n";
 
     cout << "<table style=\"width:100%\">\n"
-       	"<tr>\n"
-		"       <th>Code</th>\n"
-		"	    <th>Date</th>\n"
-		"	    <th>Time</th>\n"
-		"	    <th>Telephone</th>\n"
-		"	    <th>Name</th>\n"
-       	"</tr>\n";
+               "<tr>\n"
+               "       <th>Code</th>\n"
+               "            <th>Date</th>\n"
+               "            <th>Time</th>\n"
+               "            <th>Telephone</th>\n"
+               "            <th>Name</th>\n"
+               "</tr>\n";
 }
 
 void CallLogPageCGI::printHTML_table() {
-	const string filename("/usr/local/jcblock/callerID.dat");
+        const string filename("/usr/local/jcblock/callerID.dat");
 
-	try {
-	    auto theCallLogFile = CallLogFile(filename,numLines);
+        try {
+            auto theCallLogFile = CallLogFile(filename,numLines);
 
-	    for( auto aCallEntry : theCallLogFile.getAll()) {
+            for( auto aCallEntry : theCallLogFile.getAll()) {
             cout << "<tr>";
             cout << "<td>" << aCallEntry.getCode() << "</td>";
             cout << "<td>" << aCallEntry.getDate() << "</td>";
@@ -132,8 +134,8 @@ void CallLogPageCGI::printHTML_table() {
             if(!aCallEntry.isInList()) {
                cout << "<div class='lHalf'>" << aCallEntry.getNumber() << "</div>";
                cout << "<div class='rHalf'>"
-                       "<button class='redbtn' onclick=\"blockNum('"<< aCallEntry.getNumber() << "')\" alt='Add number to black list.'>Block</button>"
-                       "<button class='grnbtn' onclick=\"addNum('"<< aCallEntry.getNumber() << "', '" << aCallEntry.getName() << "')\" alt='Add number to white list.'>Add</button>"
+                       "<button class='redbtn' onclick=\"blockNum('"<< aCallEntry.getNumber() << "')\" title='Add number to black list.'>Block</button>"
+                       "<button class='grnbtn' onclick=\"addNum('"<< aCallEntry.getNumber() << "', '" << aCallEntry.getName() << "')\" title='Add number to white list.'>Add</button>"
                  "</div>";
             } else 
                cout << aCallEntry.getNumber();
@@ -142,63 +144,63 @@ void CallLogPageCGI::printHTML_table() {
             if(!aCallEntry.isInList()) {
                cout << "<div class='lHalf'>" << aCallEntry.getName() << "</div>";
                cout << "<div class='rHalf'>"
-                       "<button class='redbtn' onclick=\"blockName('"<< aCallEntry.getName() << "')\" alt='Add name to black list.'>Block</button>"
-                       "<button class='grnbtn' onclick=\"addName('"<< aCallEntry.getName() << "')\" alt='Add name to white list.'>Add</button>"
+                       "<button class='redbtn' onclick=\"blockName('"<< aCallEntry.getName() << "')\" title='Add name to black list.'>Block</button>"
+                       "<button class='grnbtn' onclick=\"addName('"<< aCallEntry.getName() << "')\" title='Add name to white list.'>Add</button>"
                  "</div>";
             } else
                cout << aCallEntry.getName();
             cout << "</td>"
                     "</tr>\n";
 
-	    }
+            }
 
 
-	}
-	catch(FileOpenException& e)
-	{
-	    	 cout << "caught exception: " << e.what() << endl;
-	}
+        }
+        catch(FileOpenException& e)
+        {
+              cout << "caught exception: " << e.what() << endl;
+        }
 }
 
 void CallLogPageCGI::printHTML_end() const {
-	   cout << "</table>\n";
-	   cout << "<script>\n"
-			   "function blockNum(num) {\n"
+           cout << "</table>\n";
+           cout << "<script>\n"
+               "function blockNum(num) {\n"
                "   var desc = (prompt('Blocking number: '+num+'\\nPlease enter a description', 'spam call'));\n"
                "   if(desc != null) {\n"
                "      window.location = '/cgi-bin/WriteToJCBList.cgi?num=' + num + '&desc=' + encodeURIComponent(desc);\n"
                "   }"
-			   "}\n"
-			   "function blockName(name) {\n"
+               "}\n"
+               "function blockName(name) {\n"
                "   var desc = (prompt('Blocking name: '+name+'\\nPlease enter a description', 'spam call'));\n"
                "   if(desc != null) {\n"
                "      window.location = '/cgi-bin/WriteToJCBList.cgi?name=' + name + '&desc=' + encodeURIComponent(desc);\n"
                "   }"
-			   "}\n"
-			   "function addNum(num,desc) {\n"
+               "}\n"
+               "function addNum(num,desc) {\n"
                "   desc = (prompt('White listing number: '+num+'\\nPlease enter a description', desc));\n"
                "   if(desc != null) {\n"
                "      window.location = '/cgi-bin/WriteToJCBList.cgi?num=' + num + '&file=white&desc=' + encodeURIComponent(desc);\n"
                "   }"
-			   "}\n"
-			   "function addName(name) {\n"
+               "}\n"
+               "function addName(name) {\n"
                "   desc = (prompt('White listing name: '+name+'\\nPlease enter a description', name));\n"
                "   if(desc != null) {\n"
                "      window.location = '/cgi-bin/WriteToJCBList.cgi?name=' + name + '&file=white&desc=' + encodeURIComponent(desc);\n"
                "   }"
-			   "}\n"
-	           "</script>\n"
+               "}\n"
+               "</script>\n"
                "</body>\n</html>";
 }
 
 void CallLogPageCGI::printHTML() {
-	printHTML_top();
-	printHTML_table();
-	printHTML_end();
+        printHTML_top();
+        printHTML_table();
+        printHTML_end();
 }
 
 int main(int argc, char *argv[])
 {
-	CallLogPageCGI aCallLogPageCGI;
-	aCallLogPageCGI.printHTML();
+        CallLogPageCGI aCallLogPageCGI;
+        aCallLogPageCGI.printHTML();
 }

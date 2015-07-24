@@ -102,7 +102,7 @@ void addToFile(const string& numberOrName, const string& description, const stri
     ss << setw(19) << left << string(numberOrName).append("?")
        << setw(14) << left << getDate()
        << description << endl;
-    cout << "<pre>" << ss.str() << "</pre>\n";
+    cout << "<pre>" << ss.str() << "</pre>";
     outfile << ss.str();
     outfile.close();
 }
@@ -124,20 +124,20 @@ void printHTML_top() {
  * Prints the ending HTML document with script to go back after a set time.
  */
 void printHTML_end() {
-           // add a automatch back button after a little while
+       // add a automatch back after a little while
 	   cout << "<img src=\"/robot.jpg\" />\n"
-                    "<script>\n"
-			   "setTimeout(function(){\n"
-                           "  window.history.back()\n"
-                           "}, 5000);\n"
-	           "</script>\n";
-           cout << "</body>\n</html>";
+               "<script>\n"
+		    	   "setTimeout(function(){\n"
+                       "  window.history.back()\n"
+                       "}, 5000);\n"  // go back in 5 seconds.
+	          "</script>\n";
+       cout << "</body>\n</html>";
 }
 
 
 int main(int argc, char *argv[])
 {
-      // get the paramters example: "?num=1112223333&desc=spam%20call"
+      // get the URL paramters example: "?num=1112223333&desc=spam%20call" note: cgi library will unencode the %20
       auto numberOrName = getElement("num", getElement("name","").c_str());  // get name as the default of num
       auto list = getElement("file","black");
       auto desc = getElement("desc","spam");
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
       printf("<p>Adding %s to %s list with description: %s </p>\n", numberOrName.c_str(), list.c_str(), desc.c_str());
 
       // add to file either white or black list: 
-      addToFile(numberOrName, desc, (list == "white")? "/usr/local/jcblock/whitelist.dat"s : "/usr/local/jcblock/blacklist.dat"s);
+      addToFile(numberOrName, desc, (list == "white") ? "/usr/local/jcblock/whitelist.dat"s : "/usr/local/jcblock/blacklist.dat"s);
 
       printHTML_end();
 }
