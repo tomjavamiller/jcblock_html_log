@@ -1,5 +1,5 @@
 /*
- \file CallLogPageCGI.h
+ * \file CallLogPageCGI.h
  *
  * \brief Reads in the last numLines of callerID.dat file
  *        and displays in a HTML table with (block) and (add) buttons
