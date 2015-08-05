@@ -4,7 +4,7 @@
  * \brief Writes a filter line to the JC Block's blacklist.dat or whitelist.dat files
  * using the passed in parameters.
  *
- * Uses the following parameters: 
+ * Uses the following parameters:
  *    num  - the 10 digit or less telephone number to filter on
  *    name - a caller id text field to filter on (only used when num is not used)
  *    file - the file to write to.  Either "black" (default) or "white"
@@ -14,7 +14,7 @@
  *   Note: the cgicc library will convert the %20 to a space for us.
  *
  * And then writes to the file specified and creates a little HTML page
- * that automatically go to the previous page in a few seconds 
+ * that automatically go to the previous page in a few seconds
  *
  *
  *  Copyright (C) 2015  Thomas Miller
@@ -47,7 +47,7 @@
 using namespace std;
 
 /**
- * Returns a string of the CGI element named element_name.  
+ * Returns a string of the CGI element named element_name.
  * If none found returns def_str as a string.
  * \param element_name the name of the element to get
  * \param def_str the string to return if element is not found
@@ -55,12 +55,12 @@ using namespace std;
  */
 auto getElement(const char* element_name, const char* def_str) {
 using namespace cgicc;
-	   auto formData = Cgicc();
-	   auto fi = formData.getElement(element_name);
+       auto formData = Cgicc();
+       auto fi = formData.getElement(element_name);
             if( fi != (*formData).end()  && !fi->isEmpty() ) {
-	      return fi->getValue();
-	   }
-	  return string(def_str);
+          return fi->getValue();
+       }
+      return string(def_str);
 }
 
 /**
@@ -82,15 +82,15 @@ auto getDate()
 }
 
 /**
- * Adds a jcblock "filter" line to the end of the filename file. 
+ * Adds a jcblock "filter" line to the end of the filename file.
  *
  * jcblock has a blacklist.dat and a whitelist.dat and is formated
- * with 19 charaters filter field turminated with question mark.  
+ * with 19 charaters filter field turminated with question mark.
  * Followed by a date field MMDDYY 14 charaters
  * Followed by a description fild
  * \param numberOrName the number or name to filter on.
  * \param description the description to write to the file.
- * \param filename this is the file name and full path to one 
+ * \param filename this is the file name and full path to one
  *        of the filter lists ("whitelist.dat" or "blacklist.dat")
  */
 void addToFile(const string& numberOrName, const string& description, const string& filename)
@@ -107,17 +107,17 @@ void addToFile(const string& numberOrName, const string& description, const stri
     outfile.close();
 }
 
-/** 
+/**
  * Prints the top part of the HTML document to standard out.
  */
 void printHTML_top() {
-	cout << "Content-type: text/html\n\n"
-			"<html>\n"
-			"<head>\n"
+    cout << "Content-type: text/html\n\n"
+            "<html>\n"
+            "<head>\n"
             "<title>Add Number to List</title>\n"
-			"</head>\n"
-			"<body>\n"
-			"<center><h2>Adding To List</h2></center>\n";
+            "</head>\n"
+            "<body>\n"
+            "<center><h2>Adding To List</h2></center>\n";
 }
 
 /**
@@ -125,12 +125,12 @@ void printHTML_top() {
  */
 void printHTML_end() {
        // add a automatch back after a little while
-	   cout << "<img src=\"/robot.jpg\" />\n"
+       cout << "<img src=\"/robot.jpg\" />\n"
                "<script>\n"
-		    	   "setTimeout(function(){\n"
+                   "setTimeout(function(){\n"
                        "  window.history.back()\n"
                        "}, 5000);\n"  // go back in 5 seconds.
-	          "</script>\n";
+              "</script>\n";
        cout << "</body>\n</html>";
 }
 
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
       printf("<p>Adding %s to %s list with description: %s </p>\n", numberOrName.c_str(), list.c_str(), desc.c_str());
 
-      // add to file either white or black list: 
+      // add to file either white or black list:
       addToFile(numberOrName, desc, (list == "white") ? "/usr/local/jcblock/whitelist.dat"s : "/usr/local/jcblock/blacklist.dat"s);
 
       printHTML_end();
