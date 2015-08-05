@@ -9,7 +9,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=callLogPage.cgi
 
 all: $(SOURCES) $(EXECUTABLE) deploy
-	
+
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
